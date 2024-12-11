@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart GRiD 6.0</title>
+    <link rel="icon" type="image/png"
+        href="https://www.shareicon.net/data/128x128/2016/07/09/118732_flipkart_512x512.png">
+        <a href="/" >
+    <style>
+        /* =======================
+           Global Styles
+        ======================= */
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+            /* To prevent overlap with fixed top bar */
+        }
+
+        /* =======================
+           Top Menu Bar
+        ======================= */
+        .top-menu-bar {
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            background-color: #2874f0;
+            z-index: 10;
+            padding: 0 20px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            height: 70px;
+        }
+
+        /* =======================
+           Main Container with Flexbox
+        ======================= */
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* =======================
+           Camera Section
+        ======================= */
+        .camera-section {
+            flex: 1;
+            max-width: 60%;
+            position: relative;
+        }
+
+        #video,
+        #canvas {
+            width: 100%;
+            max-width: 100%;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+            background-color: transparent;
+            border: none;
+        }
+
+        #canvas {
+            display: none;
+        }
+#productDetailsTable thead th {
+      background-color: #f4f4f4;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 6px;
+      font-size: 13px;
+    }
+        /* =======================
+           Buttons Styling
+        ======================= */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .capture-button,
+        .extract-details-button,
+        .detailsdatabasebutton,
+        .freshnessdownload-csv-button {
+            cursor: pointer;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .capture-button {
+            background-color: #ff9f00;
+        }
+
+        .extract-details-button,
+        .detailsdatabasebutton {
+            background-color: #fb641b;
+        }
+
+        .freshnessdownload-csv-button {
+            background-color: #ff9f00;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        .capture-button:hover,
+        .extract-details-button:hover,
+        .detailsdatabasebutton,
+        .freshnessdownload-csv-button:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =======================
+           Details Box Styling
+        ======================= */
+        .details-box {
+          position:relative;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e4e7ed;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+            font-size: 15px;
+            color: #191717;
+        }
+
+        #details {
+            font-size: 16px;
+            color: #878787;
+            margin-bottom: 10px;
+            margin-top: 1px;
+            font-weight: 500;
+        }
+
+        .details-box hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+
+        /* =======================
+           Freshness Table Styling
+        ======================= */
+        .table-container {
+            margin-top: 5px;
+            flex: 0 0 35%;
+        }
+
+        .table-container p {
+
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+
+        .freshness-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border: 1px solid #626262;
+            border-radius: 2px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .freshness-table th,
+        .freshness-table td {
+            padding: 8px 15px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .freshness-table thead {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .freshness-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .freshness-table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .badge-excellent {
+            background-color: #28a745;
+            /* Green */
+        }
+
+        .badge-good {
+            background-color: #17a2b8;
+            /* Teal */
+        }
+
+        .badge-fair {
+            background-color: #ffc107;
+            /* Yellow */
+            color: #343a40;
+        }
+
+        .badge-poor {
+            background-color: #fd7e14;
+            /* Orange */
+        }
+
+        .badge-unsellable {
+            background-color: #dc3545;
+            /* Red */
+        }
+
+        .menubar-button-container {
+            display: flex;
+            gap: 2px;
+            /* 3px gap between buttons */
+            justify-content: flex-end;
+            /* Align buttons to the right */
+        }
+
+        .freshness-index-button,
+        .details-extractor-button {
+            padding: 8px 16px;
+            background-color: transparent;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 520;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .freshness-index-button:hover,
+        .details-extractor-button:hover {
+            color: #dddada;
+        }
+        #productDetailsTablemain thead th {
+      background-color: #f4f4f4;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 6px;
+      font-size: 13px;
+        }
+        #productDetailsTableBodymain {
+      font-size: 13px;
+  }
+  .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* Black background with transparency */
+    }
+  /* Modal content */
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      /* Could be adjusted to your preference */
+    }
+
+    /* Close button */
+    .close-btn {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+        .spinner {
+      position: absolute;
+      top: 10px; 
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      border: 4px solid rgba(0, 0, 255, 0.7);
+      border-top: 4px solid #ffff;
+      border-radius: 50%;
+      animation: spin 0.5s linear infinite;
+        }
+        .tick{
+          position: absolute;
+            top: 10px; 
+      right: 10px;
+            width: 30px;
+            height: auto;
+            
+            z-index: 9999;
+        }
+        
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Menu Bar -->
+    <div class="top-menu-bar">
+        <img class="logo" src="https://i.ibb.co/DRLGQWY/flipkartlogo.png" alt="Flipkart Logo">
+
+        <div class="menubar-button-container">
+            <a href="/" id="detailsExtractorNav" class="details-extractor-button">Details Extraction</a>
+            <a href="/freshnessIndexPage" id="freshnessIndexNav" class="freshness-index-button">Freshness Detection</a>
+
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Camera Section -->
+        <div class="camera-section">
+           
+            <video id="video" autoplay></video>
+            <canvas id="canvas"></canvas>
+
+
+            <!-- Buttons Group -->
+            <div class="button-group">
+                <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="imageData" id="imageData">
+                    <button type="button" id="snapAndSave" class="capture-button">Capture</button>
+                </form>
+                <button type="button" id="extractProductDetails" class="extract-details-button">Detect
+                    Freshness</button>
+                <button type="button" id="freshnessdownloadCSV" class="freshnessdownload-csv-button">Download
+                    Details</button>
+                    <button type="button" id="detailsdatabase" class="detailsdatabasebutton">View Database</button>
+            </div>
+<!-- Modal Structure -->
+  <div id="databaseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2>Fresh Produce Database</h2>
+      <!-- Table will be injected here dynamically -->
+      <div id="scrollableContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+      <table id="productDetailsTable" style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Sl. No.</th> <!-- Serial Number Column -->
+            <th>Timestamp</th> <!-- Current Timestamp -->
+            <th>Produce</th>
+            <th>Freshness</th>
+            <th>Expected_Life_Span</th>
+            
+        </tr>
+    </thead>
+    <tbody id="productDetailsTableBody">
+        <!-- Product rows will be dynamically added here -->
+    </tbody>
+</table>
+    </div>
+    </div>
+  </div>
+            <!-- Details Box -->
+
+        </div>
+
+        <!-- Freshness Table Section -->
+        <div class="table-container">
+            <div id="productDetailsContainer" class="details-box">
+                <h4 id="details">DETAILS:</h4> <div id="tick-mark" class="tick" style="display:none; font-size: 26px; color: #20ac3a;">✔</div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                
+                <hr>
+                <table id="productDetailsTablemain" style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+      <thead>
+        <tr>
+          
+          <th>Timestamp</th>
+          <th>Produce</th>
+          <th>Freshness</th>
+          <th>Expected Life Span (days)</th>
+
+        </tr>
+      </thead>
+      <tbody id="productDetailsTableBodymain">
+        <!-- Product rows will be dynamically added here -->
+      </tbody>
+    </table>
+            </div>
+            <br>
+            <br>
+            <p style="text-align: center" ;>Freshness Index Scale for Fresh Produce</p>
+            <table class="freshness-table">
+                <thead>
+                    <tr>
+                        <th>Freshness Level</th>
+                        <th>Score Range</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-excellent">Excellent</span></td>
+                        <td>8.0-10.0</td>
+                        <td>Peak freshness, optimal quality</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-good">Good</span></td>
+                        <td>6.0-7.9</td>
+                        <td>Fresh with minor quality reductions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-fair">Fair</span></td>
+                        <td>4.0-5.9</td>
+                        <td>Noticeable quality decline, nearing spoilage</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-poor">Poor</span></td>
+                        <td>2.0-3.9</td>
+                        <td>Significant spoilage, not ideal for consumption</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-unsellable">Unsellable</span></td>
+                        <td>0-1.9</td>
+                        <td>Completely spoiled, unsuitable for sale or consumption</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+      document.getElementById("detailsdatabase").addEventListener("click", function() {
+    // Show the modal
+    document.getElementById("databaseModal").style.display = "block";
+
+    // Fetch data from the server to display in the table
+    fetch('/get-freshdetails-database') // This endpoint returns product data in JSON format
+        .then(response => response.json())
+        .then(data => {
+            let tableBody = document.getElementById('productDetailsTableBody');
+            tableBody.innerHTML = ''; // Clear previous rows
+
+            data.produces.forEach(produces => {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${produces.SlNo}</td>
+                    <td>${produces.Timestamp}</td>
+                    <td>${produces.Produce}</td>
+                    <td>${produces.Freshness}</td>
+                    <td>${produces.Expected_Life_Span}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
+});
+
+// Close the modal when the close button is clicked
+document.getElementById("closeModal").addEventListener("click", function() {
+    document.getElementById("databaseModal").style.display = "none";
+});
+
+// Close the modal if the user clicks outside of the modal content
+window.addEventListener("click", function(event) {
+    if (event.target === document.getElementById("databaseModal")) {
+        document.getElementById("databaseModal").style.display = "none";
+    }
+});
+
+// Close the modal if the user clicks outside of the modal content
+window.addEventListener("click", function(event) {
+    if (event.target === document.getElementById("databaseModal")) {
+        document.getElementById("databaseModal").style.display = "none";
+    }
+});
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapAndSaveButton = document.getElementById('snapAndSave');
+        const extractProductDetailsButton = document.getElementById('extractProductDetails');
+        const freshnessdownloadCSVButton = document.getElementById('freshnessdownloadCSV'); // Ensure unique ID
+        const imageDataInput = document.getElementById('imageData');
+        const productNameDisplay = document.getElementById('productName');
+        const productFreshnessIndex = document.getElementById('productFreshnessIndex');
+
+        const constraints = {
+            video: true
+        };
+
+        // Initialize webcam stream
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            video.srcObject = stream;
+        });
+
+        // Capture and send image data to the server via AJAX (Fetch API)
+        snapAndSaveButton.addEventListener('click', () => {
+          loadingSpinner.style.display = 'block'; // Show spinner
+// Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current frame from the video to the canvas
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Get the Base64 image data
+            const imageData = canvas.toDataURL('image/png');
+            const blob = dataURItoBlob(imageData); // Convert Base64 to Blob
+
+            const formData = new FormData();
+            formData.append('file', blob, 'captured_image.png');
+
+            // Submit the image data to the backend
+            fetch('/upload', {
+                method: 'POST',
+                body: formData, // Use FormData here
+            })
+                .then(response => response.json())
+    .then(data => {
+        // Hide the spinner
+        loadingSpinner.style.display = 'none';
+
+        // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+    })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                    alert('An error occurred during image upload.');
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                });
+        });
+        // Helper function to convert Base64 to Blob
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+
+
+    extractProductDetailsButton.addEventListener('click', () => {
+    loadingSpinner.style.display = 'block'; // Show spinner
+
+    fetch('/extract-details', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            loadingSpinner.style.display = 'none'; // Hide spinner
+            // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+    
+
+            // Assuming the response contains 'produce_details' array
+            const produceDetails = data.produce_details || [];
+            const tableBody = document.getElementById('productDetailsTableBodymain');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            produceDetails.forEach(produce => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${produce["Timestamp"]}</td>
+                    <td>${produce["Produce"]}</td>
+                    <td>${produce["Freshness"]}</td>
+                    <td>${produce["Expected_Life_Span"]}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            if (produceDetails.length === 0) {
+                alert('No produce details detected.');
+            }
+        })
+        
+        .catch(error => {
+            loadingSpinner.style.display = 'none'; // Hide spinner
+            console.error('Error extracting details:', error);
+            alert('An error occurred while extracting details.');
+        });
+});
+
+
+        // Download the extracted details as a CSV file
+        freshnessdownloadCSVButton.addEventListener('click', () => {
+            loadingSpinner.style.display = 'block';
+            fetch('/freshnessdownload-csv', {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (response.status === 404) {
+                        return response.json().then(data => { throw new Error(data.error); });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create a blob URL and trigger the download
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = "product_details.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    loadingSpinner.style.display = 'none';
+                    // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+   
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                    loadingSpinner.style.display = 'none';
+                });
+        });
+    </script>
+</body>
+
+</html>
