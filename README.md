@@ -9,6 +9,7 @@
    *(Sample preview of the link: A unique link will be generated during runtime, which you can open on any device.)*
 ![Screenshot 2024-12-11 231809](https://github.com/user-attachments/assets/549e6bfe-ed40-4ec6-bc2e-aa1cfe626d23)
 
+
 ### Snippets of the Web App:
 
 ![Screenshot 2024-12-11 222727](https://github.com/user-attachments/assets/ce81982f-6842-45a8-a598-737dec7fad07)
