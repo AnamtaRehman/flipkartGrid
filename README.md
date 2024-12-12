@@ -6,7 +6,7 @@
 - *Run all the cells* in the notebook.
 - After the last cell, a **live link** to access the web app will be displayed. Click the link to **open and test** the app.
 
-## Snippets of the Web App:
+### Snippets of the Web App:
 
 ![Screenshot 2024-12-11 222727](https://github.com/user-attachments/assets/ce81982f-6842-45a8-a598-737dec7fad07)
 ![Screenshot 2024-12-11 222916](https://github.com/user-attachments/assets/47bb4d66-609f-48c5-8f5e-0981671e88ab)
