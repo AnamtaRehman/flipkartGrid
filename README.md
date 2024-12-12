@@ -1,10 +1,13 @@
-### 😃Steps to Run and Test the Web Application:
+### 😃 Steps to Run and Test the Web Application:
 
-- Open the **main.ipynb** file in Google Colab.
-- Connect to an *A100 GPU* or above.
-- Create a **folder named templates** in the Colab environment and **upload two HTML files: details.html and freshness.html** in the templates folder.
-- *Run all the cells* in the notebook.
-- After the last cell, a **live link** to access the web app will be displayed. Click the link to **open and test** the app.
+1. Open the **`main.ipynb`** file in Google Colab.  
+2. Ensure you are connected to a high-performance GPU, preferably **A100 or higher**.  
+3. Create a folder named **`templates`** in the Colab environment. Upload the required **`details.html`** and **`freshness.html`** files into this folder.  
+4. Execute all the cells in the notebook sequentially.  
+5. Upon successful execution, a **unique live link** to the web application will be generated. Click on the link to **access and test the application**.  
+
+   *(Sample preview of the link: A unique link will be generated during runtime, which you can open on any device.)*
+![Screenshot 2024-12-11 231809](https://github.com/user-attachments/assets/549e6bfe-ed40-4ec6-bc2e-aa1cfe626d23)
 
 ### Snippets of the Web App:
 
