@@ -1,0 +1,742 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Flipkart GRiD 6.0</title>
+  <link rel="icon" type="image/png"
+    href="https://www.shareicon.net/data/128x128/2016/07/09/118732_flipkart_512x512.png">
+    <a href="/" >
+  <style>
+    /* Styling the top menu bar */
+    .top-menu-bar {
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 60px;
+      background-color: #2874f0;
+      z-index: 10;
+      padding: 0 20px;
+      box-sizing: border-box;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+      height: 70px;
+    }
+
+    /* Styling for the rest of the content */
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-left: 0px;
+      padding-top: 0%;
+    }
+
+    #video,
+    #canvas {
+      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
+      height: auto;
+      width: 100%;
+      max-width: 800px;
+      margin-top: 95px;
+      /* Moves the canvas down */
+      margin-left: 35px;
+      /* Moves the canvas to the right */
+      background-color: transparent;
+      border: none;
+    }
+
+    #canvas {
+      display: none;
+    }
+
+    .capture-button {
+      cursor: pointer;
+      background-color: #fb641b;
+     /*  position: absolute; */
+      color: white;
+      /* right: 401px;
+      top: 639px; */
+      /* Adjusted to align with Capture button */
+      /* Position below the extract name button */
+      z-index: 1;
+      padding: 12px 33px;
+      font-size: 16px;
+      border-radius: 4px;
+      border-color: transparent;
+      min-width: 100px;
+      font-weight: 500;
+      overflow: hidden;
+      margin-left: 5px;
+      transition: background-color 0.15s ease;
+    }
+
+    .extract-details-button {
+      cursor: pointer;
+      background-color: #fb641b;
+     /*  position: absolute; */
+      color: white;
+      /* right: 401px;
+      top: 639px; */
+      /* Adjusted to align with Capture button */
+      /* Position below the extract name button */
+      z-index: 1;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 4px;
+      border-color: transparent;
+      min-width: 100px;
+      font-weight: 500;
+      overflow: hidden;
+      margin-left: 6px;
+    }
+
+    .detailsdownload-csv-button {
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ff9f00;
+      font-size: 16px;
+      padding: 12px 24px;
+      color: #fff;
+      border-radius: 4px;
+      border-color: transparent;
+      min-width: 100px;
+      /* position: absolute; */
+      /* Set position to fixed */
+     /*  right: 214px; */
+      /* Position from the right */
+      /* top: 639px; */
+      /* Position from the top */
+      z-index: 1;
+      align-items: center;
+      font-weight: 200;
+      margin-left: 6px;
+    }
+
+    .detailsdatabasebutton {
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ff9f00;
+      font-size: 16px;
+      padding: 12px 24px;
+      color: #fff;
+      border-radius: 4px;
+      border-color: transparent;
+      min-width: 100px;
+      /* position: absolute; */
+      /* Set position to fixed */
+     /*  right: 45px; */
+      /* Position from the right */
+      /* top: 639px; */
+      /* Position from the top */
+      z-index: 1;
+      align-items: center;
+      font-weight: 200;
+      margin-left: 6px;
+      transition: background-color 0.15s ease;
+    }
+    .capture-button:active, .extract-details-button:active {
+    background-color: #c94c11; /* Bright red when clicked */
+}
+.detailsdownload-csv-button:active, .detailsdatabasebutton:active{
+  background-color:#cc7f00;
+}
+    button:hover {
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+    }
+
+    .details-box {
+  position: relative;  /* Add this */
+  width: 650px;
+  margin: 20px 20px 10px 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  min-height: 532px;
+  max-width: 650px;
+  border-color: #e4e7ed;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
+  font-size: 16px;
+  line-height: 1.5;
+  color: #191717;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+    #productDetailsTable thead th {
+      background-color: #f4f4f4;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 6px;
+      font-size: 13px;
+    }
+    #productDetailsTablemain {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensures fixed column widths */
+}
+    #productDetailsTablemain thead th {
+      background-color: #f4f4f4;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    #details {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 17px;
+      /* Adjust font size */
+      color: #878787;
+      /* Adjust color (Flipkart's blue color) */
+      /* Make the text bold */
+      margin-bottom: 10px;
+      /* Add spacing below the heading */
+      margin-top: 0px;
+      font-weight: 500;
+    }
+
+    .details-box hr {
+
+      border: 0;
+      border-top: 1px solid #ccc;
+
+      /* Thin grey line */
+      margin: 13px 0;
+      /* Spacing around the line */
+    }
+
+    .menubar-button-container {
+      display: flex;
+      gap: 2px;
+      /* 3px gap between buttons */
+      justify-content: flex-end;
+      /* Align buttons to the right */
+    }
+
+    .freshness-index-button,
+    .details-extractor-button {
+      padding: 8px 16px;
+      background-color: transparent;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 520;
+      text-decoration: none;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .freshness-index-button:hover,
+    .details-extractor-button:hover {
+      color: #dddada;
+    }
+
+ .spinner {
+  position: absolute;
+  top: 20px;  /* Adjusted */
+  right: 20px;  /* Adjusted */
+  width: 25px;
+  height: 25px;
+  border: 4px solid rgba(0, 0, 255, 0.7);
+  border-top: 4px solid #ffff;
+  border-radius: 50%;
+  animation: spin 0.5s linear infinite;
+}
+
+.tick {
+  position: absolute;
+  top: 17px;  /* Adjusted */
+  right: 18px;  /* Adjusted */
+  width: 30px;
+  height: auto;
+}
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* Black background with transparency */
+    }
+
+    /* Modal content */
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      /* Could be adjusted to your preference */
+    }
+
+    /* Close button */
+    .close-btn {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #productDetailsTableBodymain {
+      font-size: 13px;
+  }
+  /* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Center the popup */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden; /* Initially hidden */
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 9999; /* Ensure the popup is on top */
+}
+
+.popup.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+  max-width: 90%;
+}
+
+.popup p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.close-btnn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.close-btnn:hover {
+  background-color: #45a049;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 75px;
+  
+}
+
+.form {
+  display: inline;
+}
+
+.buttons {
+  margin-left: 18px;
+}
+#productDetailsTable td,
+#productDetailsTablemain td {
+    border: 1px solid #ddd;  /* Add borders to cells */
+    padding: 6px;           /* Match header padding */
+    text-align: center;     /* Center align content */
+}
+.table-container {
+  max-height: calc(532px - 40px); /* Subtract padding from details-box */
+  overflow-y: auto;
+  border: 1px solid #ddd; /* Optional border for clarity */
+}
+  </style>
+
+</head>
+
+<body>
+  
+  <!-- Top Menu Bar -->
+  <div class="top-menu-bar">
+    <img class="logo" src="https://i.ibb.co/DRLGQWY/flipkartlogo.png" alt="Flipkart Logo"></img>
+    <div class="menubar-button-container">
+      <a href="/" id="detailsExtractorNav" class="details-extractor-button">Details Extraction</a>
+      <a href="/freshnessIndexPage" id="freshnessIndexNav" class="freshness-index-button">Freshness Detection</a>
+
+    </div>
+  </div>
+   <div class="popup" id="popup">
+        <div class="popup-content">
+            <p>The accuracy of the system highly depends on the camera quality. Kindly use an attachable HD camera. PC cameras are not preferred.</p>
+            <button class="close-btnn" id="closeBtn">I Understand</button>
+        </div>
+    </div>
+    <div class="main-container">
+  <video id="video" autoplay></video>
+  <canvas id="canvas"></canvas>
+  <br>
+
+  <!-- Modal Structure -->
+  <div id="databaseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2>Product Database</h2>
+      <!-- Table will be injected here dynamically -->
+      <div id="scrollableContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+      <table id="productDetailsTable" style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Sl. No.</th> <!-- Serial Number Column -->
+            <th>Product</th>
+            <th>Timestamp</th> <!-- Current Timestamp -->
+            <th>Net Content</th>
+            <th>MRP</th>
+            <th>Expiry Date</th> <!-- Expiry Date Column -->
+            <th>Quantity</th>
+            <th>Expired?</th> <!-- Expired Status (Yes/No) -->
+            <th>Expected Lifespan</th> <!-- Expected Life in months -->
+        </tr>
+    </thead>
+    <tbody id="productDetailsTableBody">
+        <!-- Product rows will be dynamically added here -->
+    </tbody>
+</table>
+    </div>
+    </div>
+  </div>
+
+  <div class="container">
+  <div id="productDetailsContainer" class="details-box">
+    <h4 id="details">DETAILS: </h4>
+    <div id="tick-mark" class="tick" style="display:none; font-size: 26px; color: #20ac3a;">✔</div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <hr>
+    <!-- Table to display product details -->
+    <div class="table-container">
+    <table id="productDetailsTablemain" style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+      <thead>
+        <tr>
+          
+      <th style="width: 13%;">Product</th>
+      <th style="width: 8%;">MRP</th>
+      <th style="width: 12%;">Expiry Date</th>
+      <th style="width: 11%;">Nt. Content</th>
+      <th style="width: 6%;">Qtty.</th>
+      <th style="width: 14%;">Timestamp</th>
+      <th style="width: 9%;">Expired?</th>
+      <th style="width: 12%;">Lifespan</th>
+
+        </tr>
+      </thead>
+      <tbody id="productDetailsTableBodymain">
+        <!-- Product rows will be dynamically added here -->
+      </tbody>
+    </table>
+    </div>
+
+    
+  </div>
+  <div class="buttons">
+    <form id="uploadForm" class="form" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="imageData" id="imageData">
+      <button type="button" id="snapAndSave" class="capture-button">Capture</button>
+    </form>
+  
+    <!-- Single Extract Details Button -->
+    <button type="button" id="detailsextractProductDetails" class="extract-details-button">Extract Details</button>
+  
+  
+  
+    <!-- Download CSV Button -->
+    <button type="button" id="detailsdownloadCSV" class="detailsdownload-csv-button">Download Details</button>
+    <button type="button" id="detailsdatabase" class="detailsdatabasebutton">View Database</button>
+  </div>
+  
+</div>
+</div>
+  <script>
+    if (!sessionStorage.getItem("disclaimerAcknowledged")) {
+    // If not acknowledged, show the popup
+    document.getElementById("popup").classList.add("show");
+
+    // Add event listener to close button
+    document.getElementById("closeBtn").addEventListener("click", function() {
+        // Set sessionStorage item to indicate the disclaimer was acknowledged
+        sessionStorage.setItem("disclaimerAcknowledged", "true");
+        
+        // Hide the popup
+        document.getElementById("popup").classList.remove("show");
+    });
+}
+  document.getElementById("detailsdatabase").addEventListener("click", function() {
+    // Show the modal
+    document.getElementById("databaseModal").style.display = "block";
+
+    // Fetch data from the server to display in the table
+    fetch('/get-database') // This endpoint returns product data in JSON format
+        .then(response => response.json())
+        .then(data => {
+            let tableBody = document.getElementById('productDetailsTableBody');
+            tableBody.innerHTML = ''; // Clear previous rows
+
+            data.products.forEach(product => {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.SlNo}</td>
+                    <td>${product.Product}</td>
+                    <td>${product.Timestamp}</td>
+                    <td>${product.NetContent}</td>
+                    <td>${product.MRP}</td>
+                    <td>${product.ExpiryDate}</td>
+                    <td>${product.Quantity}</td>
+                    <td>${product.Expired}</td>
+                    <td>${product.ExpectedLife}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
+});
+
+// Close the modal when the close button is clicked
+document.getElementById("closeModal").addEventListener("click", function() {
+    document.getElementById("databaseModal").style.display = "none";
+});
+
+// Close the modal if the user clicks outside of the modal content
+window.addEventListener("click", function(event) {
+    if (event.target === document.getElementById("databaseModal")) {
+        document.getElementById("databaseModal").style.display = "none";
+    }
+});
+
+// Close the modal if the user clicks outside of the modal content
+window.addEventListener("click", function(event) {
+    if (event.target === document.getElementById("databaseModal")) {
+        document.getElementById("databaseModal").style.display = "none";
+    }
+});
+    const loadingSpinner = document.getElementById('loadingSpinner');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapAndSaveButton = document.getElementById('snapAndSave');
+        const detailsextractProductDetailsButton = document.getElementById('detailsextractProductDetails');
+        const detailsdownloadCSVButton = document.getElementById('detailsdownloadCSV'); // Ensure unique ID
+        const imageDataInput = document.getElementById('imageData');
+        const detailsproductNameDisplay = document.getElementById('detailsproductName');
+        const productNetContentDisplay = document.getElementById('productNetContent');
+        const productMRPDisplay = document.getElementById('productMRP');
+        const productExpiryDateDisplay = document.getElementById('productExpiryDate');
+
+
+        const constraints = {
+            video: true
+        };
+
+        // Access webcam
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            video.srcObject = stream;
+        });
+
+        // Capture button to take screenshot
+        snapAndSaveButton.addEventListener('click', () => {
+          loadingSpinner.style.display = 'block'; // Show spinner
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current frame from the video to the canvas
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Get the Base64 image data
+            const imageData = canvas.toDataURL('image/png');
+            const blob = dataURItoBlob(imageData); // Convert Base64 to Blob
+
+            const formData = new FormData();
+            formData.append('file', blob, 'captured_image.png');
+
+            // Submit the image data to the backend
+            fetch('/upload', {
+                method: 'POST',
+                body: formData, // Use FormData here
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                    
+        // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                    alert('An error occurred during image upload.');
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                });
+        });
+        // Helper function to convert Base64 to Blob
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+
+
+        // Extract product details button
+        detailsextractProductDetailsButton.addEventListener('click', () => {
+            loadingSpinner.style.display = 'block'; // Show spinner
+            fetch('/detailsextract-details', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                    // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+                    const products = data.products || [];
+                    const tableBody = document.getElementById('productDetailsTableBodymain');
+                    tableBody.innerHTML = ''; // Clear any existing rows
+
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td>${product["Product Name"]}</td>
+                    <td>${product["MRP"]}</td>
+                    <td>${product["Expiry Date"]}</td>
+                    <td>${product["Net Content"]}</td>
+                    <td>${product["Quantity"]}</td>
+                    <td>${product["Timestamp"]}</td>
+                    <td>${product["Expired"]}</td>
+                    <td>${product["ExpectedLife"]}</td>
+                `;
+                        tableBody.appendChild(row);
+                    });
+
+                    if (products.length === 0) {
+                        alert('No products detected.');
+                    }
+                })
+                .catch(error => {
+                    loadingSpinner.style.display = 'none'; // Hide spinner
+                    console.error('Error extracting details:', error);
+                    alert('An error occurred while extracting details.');
+                });
+        });
+
+        // Download CSV button
+        detailsdownloadCSVButton.addEventListener('click', () => {
+            loadingSpinner.style.display = 'block';
+
+            fetch('/detailsdownload-csv', {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (response.status === 404) {
+                        return response.json().then(data => { throw new Error(data.error); });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create a blob URL and trigger the download
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = "product_details.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    loadingSpinner.style.display = 'none';
+                    
+        // Show the green tick mark in place of the spinner
+        const tickMark = document.getElementById('tick-mark');
+        tickMark.style.display = 'block';
+
+        // Hide the tick mark after 1 second
+        setTimeout(() => {
+            tickMark.style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second
+                })
+                .catch(error => {
+                    console.error('Error downloading CSV:', error);
+                    alert(error.message);
+                    loadingSpinner.style.display = 'none';
+                });
+        });
+  </script>
+
+</body>
+
+</html>
